@@ -23,27 +23,57 @@ public class TaskManager
     }
 
     public void ShowAllTasks()
+{
+    if(tasks.Count == 0)
     {
-        if(tasks.Count == 0)
-        {
-            System.Console.WriteLine("No Task found, Please add task to proceed");
-            return ;
-        }
-        System.Console.WriteLine("=============  ALL TASKS  =================");
-        foreach(var item in tasks)
-        {
-            System.Console.WriteLine(item.GetTaskDetail());
-        }
+        System.Console.WriteLine("No Task found, Please add task to proceed");
+        return;
+    }
+    
+    System.Console.WriteLine("============= ALL TASKS =================");
+    
+    List<Task> SortedTasks = new List<Task>(tasks);
+    
+    SortedTasks.Sort(TaskComparison);
+    
+    foreach(var item in SortedTasks)
+    {
+        System.Console.WriteLine(item.GetTaskDetail());
+    }
+}
+
+    private int TaskComparison(Task x, Task y)
+    {
+        // Compare by date 
+        if (x.DueDate < y.DueDate) return -1;
+        if (x.DueDate > y.DueDate) return 1;
         
+        // date same but  by priority
+        int priorityX = GetPriorityNumber(x);
+        int priorityY = GetPriorityNumber(y);
         
+        if (priorityX < priorityY) return -1;
+        if (priorityX > priorityY) return 1;
+        return 0;
+    }
+
+    private int GetPriorityNumber(Task task)
+    {
+        if (task is PriorityTask pt)
+        {
+            if (pt.Priority == PriorityLevel.High) return 1;
+            if (pt.Priority == PriorityLevel.Medium) return 2;
+            return 3;
+        }
+        return 3;
     }
 
     public void CompleteTask(int id)
     {
         try
         {
-            if(id<0)
-                throw new ArgumentException("ID must be a positive number.You know right?");
+            if(id <= 0)
+                throw new ArgumentException("ID must be a positive number.");
 
             Task FoundTask = null;
 
@@ -56,29 +86,32 @@ public class TaskManager
                 }
             }
 
+            if(FoundTask == null)
+            {
+                Console.WriteLine($"Task with ID {id} not found");
+                return;
+            }
+
             if(FoundTask.Status == TaskStatus.Completed)
             {
-                System.Console.WriteLine("That Task is Already completed boy! Forgot? You gotta sleep");
+                Console.WriteLine("That task is already completed!");
+            }
+            else
+            {
                 FoundTask.Status = TaskStatus.Completed;
-
                 Console.WriteLine($"Task '{FoundTask.Title}' (ID: {FoundTask.Id}) marked as completed!");
                 Console.WriteLine($"Completed on: {DateTime.Now}");
             }
-            
-            else
-            {
-                System.Console.WriteLine($"Task '{FoundTask.Title}' (ID: {FoundTask.Id}) Not found");
-            }
-
-
         }
         catch(Exception ex)
         {
-            System.Console.WriteLine($"Error Occurred: {ex.Message}");
+            Console.WriteLine($"Error Occurred: {ex.Message}");
         }
     }
 
-    // GenerateReport Methode
+
+
+
     public void GenerateReport()
     {
         try
@@ -137,4 +170,79 @@ public class TaskManager
         
         
     }
+
+
+
+    public void EditTask(int id)
+    {
+        try
+        {
+            if(id <= 0)
+                throw new ArgumentException("ID must be a positive number.");
+
+            Task FoundTask = null;
+
+            foreach(var item in tasks)
+            {
+                if(item.Id == id)
+                {
+                    FoundTask = item;
+                    break;
+                }
+            }
+
+            if(FoundTask == null)
+            {
+                Console.WriteLine($"Task with ID {id} not found");
+                return;
+            }
+
+            Console.WriteLine($"Editing Task: {FoundTask.Title}");            
+            Console.Write($"New title ({FoundTask.Title}): ");
+            string newTitle = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(newTitle))
+            {
+                FoundTask.Title = newTitle;
+            }
+            
+            Console.Write($"New description ({FoundTask.Description}): ");
+            string newDesc = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(newDesc))
+            {
+                FoundTask.Description = newDesc;
+            }
+            
+            Console.Write($"New due date ({FoundTask.DueDate:yyyy-mm-dd}): ");
+            string newDate = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(newDate))
+            {
+                DateTime dueDate;
+                if (DateTime.TryParse(newDate, out dueDate))
+                {
+                    FoundTask.DueDate = dueDate;
+                }
+            }
+            
+            if (FoundTask is PriorityTask priorityTask)
+            {
+                Console.Write($"New priority ({priorityTask.Priority}): ");
+                string newPriority = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(newPriority))
+                {
+                    PriorityLevel priority;
+                    if (Enum.TryParse<PriorityLevel>(newPriority, true, out priority))
+                    {
+                        priorityTask.Priority = priority;
+                    }
+                }
+            }
+            
+            Console.WriteLine("Task updated successfully!");
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine($"Error Occurred: {ex.Message}");
+        }
+    }
+
 }
