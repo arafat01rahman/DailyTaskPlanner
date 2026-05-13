@@ -32,6 +32,10 @@ class Program
             }
             else if (choice == "5")
             {
+                ClearAllTasks();
+            }
+            else if (choice == "6")
+            {
                 Console.WriteLine("Goodbye!");
                 break;
             }
@@ -45,15 +49,16 @@ class Program
     
     static void ShowMenu()
     {
-        Console.Clear();
+        
         Console.WriteLine("\nMAIN MENU");
         Console.WriteLine("=========");
         Console.WriteLine("1. Add New Task");
         Console.WriteLine("2. View All Tasks");
         Console.WriteLine("3. Mark Task as Completed");
         Console.WriteLine("4. Generate Report");
-        Console.WriteLine("5. Exit");
-        Console.Write("Choose an option (1-5): ");
+        Console.WriteLine("5. Clear All Tasks");
+        Console.WriteLine("6. Exit");
+        Console.Write("Choose an option (1-6): ");
     }
     
     static void AddTask()
@@ -112,6 +117,16 @@ class Program
             Console.WriteLine("Invalid ID!");
         }
         
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadKey();
+    }
+    
+    static void ClearAllTasks()
+    {
+        Console.Clear();
+        Console.WriteLine("CLEAR ALL TASKS");
+        Console.WriteLine("===============");
+        manager.ClearAllTasks();
         Console.WriteLine("Press any key to continue...");
         Console.ReadKey();
     }
