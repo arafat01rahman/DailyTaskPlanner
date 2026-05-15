@@ -31,7 +31,7 @@ public class TaskManager
         if (tasks.Count == 0)
         {
             Console.WriteLine("No Task found, Please add task to proceed");
-            Console.ReadKey();  
+            Console.ReadKey();
             return;
         }
 
@@ -90,8 +90,7 @@ public class TaskManager
 
             if (FoundTask == null)
             {
-                Console.WriteLine($"Task with ID {id} not found");
-                return;
+                throw new TaskNotFoundException($"Task with ID {id} was not found in the system.");
             }
 
             if (FoundTask.Status == TaskStatus.Completed)
@@ -104,6 +103,10 @@ public class TaskManager
                 Console.WriteLine($"Task '{FoundTask.Title}' (ID: {FoundTask.Id}) marked as completed!");
                 Console.WriteLine($"Completed on: {DateTime.Now}");
             }
+        }
+        catch (TaskNotFoundException ex)
+        {
+            Console.WriteLine($"Custom Exception: {ex.Message}");
         }
         catch (Exception ex)
         {

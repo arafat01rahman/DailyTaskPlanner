@@ -10,6 +10,6 @@ public class PriorityTask : Task
 
     public override string GetTaskDetail()
     {
-        return $"{base.GetTaskDetail()} | Priority: {Priority}";
+        return $"{base.GetTaskDetail()} | Priority:  {Priority}";
     }
 }

@@ -6,8 +6,9 @@ class Program
     
     static void Main(string[] args)
     {
-        Console.WriteLine("DAILY TASK PLANNER");
-        Console.WriteLine("==================");
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("|  DAILY TASK PLANNER |");
+        Console.WriteLine("-----------------------");
         
         while (true)
         {
@@ -51,7 +52,7 @@ class Program
     {
         
         Console.WriteLine("\nMAIN MENU");
-        Console.WriteLine("=========");
+        Console.WriteLine("---------------------");
         Console.WriteLine("1. Add New Task");
         Console.WriteLine("2. View All Tasks");
         Console.WriteLine("3. Mark Task as Completed");
@@ -65,7 +66,7 @@ class Program
     {
         Console.Clear();
         Console.WriteLine("ADD NEW TASK");
-        Console.WriteLine("============");
+        Console.WriteLine("---------------------");
         
         Console.Write("Enter title: ");
         string title = Console.ReadLine();
@@ -102,7 +103,7 @@ class Program
     {
         Console.Clear();
         Console.WriteLine("COMPLETE TASK");
-        Console.WriteLine("=============");
+        Console.WriteLine("-----------------------------");
         
         manager.ShowAllTasks();
         
@@ -125,7 +126,7 @@ class Program
     {
         Console.Clear();
         Console.WriteLine("CLEAR ALL TASKS");
-        Console.WriteLine("===============");
+        Console.WriteLine("----------------------");
         manager.ClearAllTasks();
         Console.WriteLine("Press any key to continue...");
         Console.ReadKey();
